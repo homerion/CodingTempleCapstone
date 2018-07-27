@@ -1,0 +1,88 @@
+{% extends 'bootstrap/base.html' %}
+
+
+
+{% block title %}
+Welcome
+{% endblock %}
+
+
+{% block scripts %}
+<script src="https://code.jquery.com/jquery-3.3.1.slim.js"
+  integrity="sha256-fNXJFIlca05BIO2Y5zh1xrShK3ME+/lYZ0j+ChxX2DA="
+  crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script type="text/javascript" src="../static/js/main.js"></script>
+{% endblock %}
+
+
+{% block navbar %}
+<div class="Header">
+  <nav class="navbar d-flex bg-info navbar-dark">
+    <a class="navbar-brand" href={{url_for("index")}}>Tidy</a>
+        <a class="nav-link text-light" href='{{url_for("index")}}'>Home</a>
+        <a class="nav-link text-light" href="">Tags</a>
+        <a class="nav-link text-light" href="">Pins</a>
+        <a class="nav-link text-light" href="">New</a>
+
+    <!--form for filtering out tags?  -->
+    <form class="form-inline ml-auto my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" />
+    </form>
+    {% if current_user.is_authenticated %}
+    <a class="nav-link text-light" href='{{url_for("logout")}}'>Logout</a>
+    {% else %}
+    <a class="nav-link text-light" href='{{url_for("login")}}'>Login</a>
+    <a class="nav-link text-light" href='{{url_for("register")}}'>Register</a>
+    {% endif %}
+
+    </nav>
+
+</div>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container">
+<form class="text-center" id="list">
+  <div class="form-check">
+    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+    <label class="form-check-label" for="defaultCheck1">
+        Check Check
+    </label>
+  </div>
+  <div class="form-check">
+    <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
+    <label class="form-check-label" for="defaultCheck2">
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+    </label>
+  </div>
+  <div class="form-check">
+    <input class="form-check-input" type="checkbox" value="" id="defaultCheck3">
+    <label class="form-check-label" for="defaultCheck3">
+      Default checkbox
+    </label>
+  </div>
+</form>
+<form class="text-center">
+  <input type="text" placeholder=" + List Item" id="newitem" autofocus>
+  <input type="submit" value="+" name="add">
+</form>
+</div>
+
+
+
+  {% block app_content %}
+
+  {% endblock %}
+
+{% endblock %}
+
+
+
+{% block styles %}
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" href="../static/css/main.css">
+{% endblock %}
