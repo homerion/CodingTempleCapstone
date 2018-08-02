@@ -10,6 +10,11 @@ $(".form-check").click(event=>{
   $(event.target).children('input').prop('checked',!toggle);
   $(event.target).children('label').toggleClass('strike');
 })
+// $("#newitem").on('submit',event=>{
+//   event.preventDefault();
+//   $.post('/index',this.entry,)
+// })
+
 // $( "form" ).on( "submit", function( event ) {
 //   event.preventDefault();
 //   let input = $( this ).children("[type='text']").val();

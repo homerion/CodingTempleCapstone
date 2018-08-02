@@ -1,0 +1,53 @@
+{{ form.csrf_token }}
+
+{% if form.username.flags.required %}*{% endif %}
+{% for field in form%}
+  {{field}}
+{% endfor %}
+
+{% if form.username %}
+<label for="username">Username</label>
+<input class="form-control" id="username" name="username" required type="text" value="">
+{% endif %}
+{% if form.username.errors %}
+  <ul class="errors">{% for error in form.username.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+{% endif %}
+
+{% if form.email %}
+<label for="email">Email</label>
+<input class="form-control" id="email" name="email" required="" type="text" value="">
+{% endif %}
+{% if form.email.errors %}
+  <ul class="errors">{% for error in form.email.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+{% endif %}
+
+{% if form.password %}
+<label for="password">Password</label>
+<input class="form-control" id="password" name="password" required="" type="text" value="">
+{% endif %}
+{% if form.password.errors %}
+  <ul class="errors">{% for error in form.password.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+{% endif %}
+
+{% if form.confirmpass %}
+<label for="confirmpass">Confirm Your Password</label>
+<input class="form-control" id="confirmpass" name="confirmpass" required="" type="text" value="">
+{% endif %}
+{% if form.confirmpass.errors %}
+  <ul class="errors">{% for error in form.confirmpass.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+{% endif %}
+
+{% if form.submit %}
+<label for="confirmpass">Confirm Your Password</label>
+<input class="form-control" id="confirmpass" name="confirmpass" required="" type="text" value="">
+{% endif %}
+{% if form.confirmpass.errors %}
+  <ul class="errors">{% for error in form.confirmpass.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+{% endif %}
+
+{% if form.errors %}
+{%for error in form.errors%}
+{{error}}:
+{{ form.errors[error] }}
+{%endfor%}
+  {%endif%}
