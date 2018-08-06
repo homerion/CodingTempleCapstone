@@ -12,11 +12,7 @@ from werkzeug.urls import url_parse
 @login_required
 def index():
     if request.method == "POST":
-        user_entries=Entry.query.filter_by(user_id=current_user.id).all():
-        if user_entries is None:
-
-
-        if Entry.query.filter_by(user_id=current_user.id,text=request.form['entry']).first() is not None:
+        if Entry.query.filter_by(user_id=current_user.id,text=request.form['entry']).first() is None:
             e = Entry(user_id=current_user.id,text=request.form['entry'])
             db.session.add(e)
             db.session.commit()

@@ -1,15 +1,15 @@
 $("input[type='search']").on('input', event => {
   console.log(event.target.value);
 })
-$(":checkbox").change(event=>{
-  let id = event.target.id;
-  $(`label[for=${id}]`).toggleClass('strike');
-})
-$(".form-check").click(event=>{
-  let toggle = $(event.target).children('input').prop('checked');
-  $(event.target).children('input').prop('checked',!toggle);
-  $(event.target).children('label').toggleClass('strike');
-})
+// $(":checkbox").change(event=>{
+//   let id = event.target.id;
+//   $(`label[for=${id}]`).toggleClass('strike');
+// })
+// $(".form-check").click(event=>{
+//   let toggle = $(event.target).children('input').prop('checked');
+//   $(event.target).children('input').prop('checked',!toggle);
+//   $(event.target).children('label').toggleClass('strike');
+// })
 // $("#newitem").on('submit',event=>{
 //   event.preventDefault();
 //   $.post('/index',this.entry,)

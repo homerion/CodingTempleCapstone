@@ -16,7 +16,7 @@ class User(UserMixin,db.Model):
     # tags = db.relationship("Tags_Map", back_populates="user")
 
     def set_password(self, password):
-        self.password_hash = generate_password_hash(password)
+        self.password_hash = generate_password_hash(password,length=32)
 
     def check_password(self,password):
         return check_password_hash(self.password_hash,password)
@@ -39,6 +39,7 @@ class Entry(db.Model):
     def __repr__(self):
         return 'Entry: {}, By User: {}'.format(
         self.text,self.user_id)
+
 
 class Tag(db.Model):
     # columns
@@ -67,5 +68,3 @@ class Tag_Map(db.Model):
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
-
-# login_manager.login_message = "You didn't log in yet!"
