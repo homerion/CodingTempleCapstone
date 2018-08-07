@@ -2,7 +2,7 @@ from app import app, db
 from flask import render_template, redirect, url_for, flash, request
 from app.forms import LoginForm, RegisterForm
 from flask_login import current_user, login_user, logout_user, login_required
-from app.models import User, Entry, Tag, entry_tags
+from app.models import User, Entries, Tags, tag_map
 from werkzeug.urls import url_parse
 
 
@@ -12,28 +12,27 @@ from werkzeug.urls import url_parse
 @login_required
 def index():
     if request.method == "POST":
-        e = Entry.query.filter_by(user_id=current_user.id,text=request.form['entry']).first()
-        t = Tag.query.filter_by(tag=request.form['tag']).first()
-        tmap = Tag_Map.query.filter_by(entry_id=e.id,tag_id=t.id).first()
+        e = Entries.query.filter_by(user_id=current_user.id,text=request.form['entry']).first()
+        t = Tags.query.filter_by(tag=request.form['tag']).first()
         if e is None:
-            e = Entry(user_id=current_user.id,text=request.form['entry'])
+            e = Entries(user_id=current_user.id,text=request.form['entry'])
             db.session.add(e)
         if t is None:
-            t = Tag(tag=request.form['tag'])
+            t = Tags(tag=request.form['tag'])
             db.session.add(t)
 
         db.session.commit()
-    list=Entry.query.filter_by(user_id=current_user.id).all()
+    list=Entries.query.filter_by(user_id=current_user.id).all()
     return render_template('index.html',list=list)
 
 
 @app.route('/t/<tag>')
 @login_required
 def tag_list(tag):
-    tag_id=Tag.query.filter_by(tag=tag).first()
+    tag_id=Tags.query.filter_by(tag=tag).first()
     if tag_id is None:
         return redirect(url_for('index'))
-    u_entries=Entry.query.filter_by(user_id=current_user.id).all()
+    u_entries=Entries.query.filter_by(user_id=current_user.id).all()
 
     return render_template('list.html',list=list)
 

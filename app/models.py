@@ -5,18 +5,19 @@ from flask_login import UserMixin
 
 
 class User(UserMixin,db.Model):
+    __tablename__='User'
     # columns
     id=db.Column(db.Integer,primary_key=True)
     username=db.Column(db.String(16),index=True, unique=True)
     email=db.Column(db.String(120),index=True, unique=True)
     password_hash=db.Column(db.String(256))
+    date_created=db.Column(db.DateTime,default=datetime.now())
 
     # relationships:
-    entries = db.relationship("Entry",backref='user')
-    # tags = db.relationship("Tags_Map", back_populates="user")
+    entries = db.relationship("Entries",backref='User')
 
     def set_password(self, password):
-        self.password_hash = generate_password_hash(password,length=32)
+        self.password_hash = generate_password_hash(password,salt_length=32)
 
     def check_password(self,password):
         return check_password_hash(self.password_hash,password)
@@ -25,49 +26,41 @@ class User(UserMixin,db.Model):
         return 'Username: {}, Email: {}'.format(
         self.username,self.email)
 
-entry_tags = db.Table('entry_to_tag',
-    db.Column('entry_id', db.Integer, db.ForeignKey('Entry.id')),
-    db.Column('tag_id', db.Integer, db.ForeignKey('Tag.id'))
+tag_map = db.Table('tag_map',
+    db.Column('entry_id', db.Integer, db.ForeignKey('Entries.id')),
+    db.Column('tag_id', db.Integer, db.ForeignKey('Tags.id'))
     )
 
-class Entry(db.Model):
+class Entries(db.Model):
+    __tablename__='Entries'
     # columns
     id=db.Column(db.Integer,primary_key=True)
-    user_id=db.Column(db.Integer,db.ForeignKey('user.id'),index=True)
+    user_id=db.Column(db.Integer,db.ForeignKey('User.id'),index=True)
     text=db.Column(db.String)
+    date_created=db.Column(db.DateTime,default=datetime.now())
 
     # relationships
-    # tag = db.relationship("Tag_Map",backref="Entry")
+    tags = db.relationship("Tags",secondary=tag_map)
 
     def __repr__(self):
         return 'Entry: {}, By User: {}'.format(
         self.text,self.user_id)
 
 
-class Tag(db.Model):
+class Tags(db.Model):
+    __tablename__='Tags'
     # columns
     id=db.Column(db.Integer,primary_key=True)
     tag=db.Column(db.String,index=True, unique=True)
 
     # relationships
-    entries = db.relationship("Entry",secondary=entry_tags)
+    entries = db.relationship("Entries",secondary=tag_map)
 
     def __repr__(self):
         return '{}'.format(
         self.tag)
 
 
-
-# class Tag_Map(db.Model):
-     # columns
-#     id=db.Column(db.Integer,primary_key=True)
-#     entry_id=db.Column(db.Integer,db.ForeignKey('entry.id'))
-#     tag_id=db.Column(db.Integer,db.ForeignKey('tag.id'))
-
-    # relationships
-    # user = db.relationship("Tags_Map", backref=db.backref("role", lazy="joined"))
-    # entry = db.relationship("Tags_Map", backref=db.backref("role", lazy="joined"))
-    # tag = db.relationship("Tags_Map", backref=db.backref("role", lazy="joined"))
 
 
 @login.user_loader
