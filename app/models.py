@@ -12,7 +12,7 @@ class User(UserMixin,db.Model):
     password_hash=db.Column(db.String(256))
 
     # relationships:
-    entries = db.relationship("Entry",backref='User')
+    entries = db.relationship("Entry",backref='user')
     # tags = db.relationship("Tags_Map", back_populates="user")
 
     def set_password(self, password):
@@ -25,16 +25,19 @@ class User(UserMixin,db.Model):
         return 'Username: {}, Email: {}'.format(
         self.username,self.email)
 
-
+entry_tags = db.Table('entry_to_tag',
+    db.Column('entry_id', db.Integer, db.ForeignKey('Entry.id')),
+    db.Column('tag_id', db.Integer, db.ForeignKey('Tag.id'))
+    )
 
 class Entry(db.Model):
     # columns
     id=db.Column(db.Integer,primary_key=True)
-    user_id=db.Column(db.Integer,db.ForeignKey('user.id'))
+    user_id=db.Column(db.Integer,db.ForeignKey('user.id'),index=True)
     text=db.Column(db.String)
 
     # relationships
-    tag = db.relationship("Tag_Map",backref="Entry")
+    # tag = db.relationship("Tag_Map",backref="Entry")
 
     def __repr__(self):
         return 'Entry: {}, By User: {}'.format(
@@ -47,17 +50,19 @@ class Tag(db.Model):
     tag=db.Column(db.String,index=True, unique=True)
 
     # relationships
-    entry = db.relationship("Tag_Map",backref="Tag")
+    entries = db.relationship("Entry",secondary=entry_tags)
 
     def __repr__(self):
         return '{}'.format(
         self.tag)
 
-class Tag_Map(db.Model):
-    # columns
-    id=db.Column(db.Integer,primary_key=True)
-    entry_id=db.Column(db.Integer,db.ForeignKey('entry.id'))
-    tag_id=db.Column(db.Integer,db.ForeignKey('tag.id'))
+
+
+# class Tag_Map(db.Model):
+     # columns
+#     id=db.Column(db.Integer,primary_key=True)
+#     entry_id=db.Column(db.Integer,db.ForeignKey('entry.id'))
+#     tag_id=db.Column(db.Integer,db.ForeignKey('tag.id'))
 
     # relationships
     # user = db.relationship("Tags_Map", backref=db.backref("role", lazy="joined"))

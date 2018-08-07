@@ -2,7 +2,7 @@ from app import app, db
 from flask import render_template, redirect, url_for, flash, request
 from app.forms import LoginForm, RegisterForm
 from flask_login import current_user, login_user, logout_user, login_required
-from app.models import User, Entry, Tag, Tag_Map
+from app.models import User, Entry, Tag, entry_tags
 from werkzeug.urls import url_parse
 
 
@@ -12,14 +12,30 @@ from werkzeug.urls import url_parse
 @login_required
 def index():
     if request.method == "POST":
-        if Entry.query.filter_by(user_id=current_user.id,text=request.form['entry']).first() is None:
+        e = Entry.query.filter_by(user_id=current_user.id,text=request.form['entry']).first()
+        t = Tag.query.filter_by(tag=request.form['tag']).first()
+        tmap = Tag_Map.query.filter_by(entry_id=e.id,tag_id=t.id).first()
+        if e is None:
             e = Entry(user_id=current_user.id,text=request.form['entry'])
             db.session.add(e)
-            db.session.commit()
+        if t is None:
+            t = Tag(tag=request.form['tag'])
+            db.session.add(t)
+
+        db.session.commit()
     list=Entry.query.filter_by(user_id=current_user.id).all()
-    return render_template('index.html',title='Home',list=list)
+    return render_template('index.html',list=list)
 
 
+@app.route('/t/<tag>')
+@login_required
+def tag_list(tag):
+    tag_id=Tag.query.filter_by(tag=tag).first()
+    if tag_id is None:
+        return redirect(url_for('index'))
+    u_entries=Entry.query.filter_by(user_id=current_user.id).all()
+
+    return render_template('list.html',list=list)
 
 @app.route('/login', methods=['GET','POST'])
 def login():
