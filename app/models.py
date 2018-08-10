@@ -15,6 +15,7 @@ class User(UserMixin,db.Model):
 
     # relationships:
     entries = db.relationship("Entries",backref='User')
+    # tags = db.relationship("Tags",backref='User')
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password,salt_length=32)
@@ -26,10 +27,12 @@ class User(UserMixin,db.Model):
         return 'Username: {}, Email: {}'.format(
         self.username,self.email)
 
+
 tag_map = db.Table('tag_map',
     db.Column('entry_id', db.Integer, db.ForeignKey('Entries.id')),
     db.Column('tag_id', db.Integer, db.ForeignKey('Tags.id'))
     )
+
 
 class Entries(db.Model):
     __tablename__='Entries'
@@ -59,8 +62,6 @@ class Tags(db.Model):
     def __repr__(self):
         return '{}'.format(
         self.tag)
-
-
 
 
 @login.user_loader

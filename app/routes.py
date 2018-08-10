@@ -11,30 +11,46 @@ from werkzeug.urls import url_parse
 @app.route('/index', methods=['GET','POST'])
 @login_required
 def index():
+    uTags = Tags.query.join(Entries.tags).filter(Entries.user_id==current_user.id).all()
     if request.method == "POST":
         e = Entries.query.filter_by(user_id=current_user.id,text=request.form['entry']).first()
         t = Tags.query.filter_by(tag=request.form['tag']).first()
         if e is None:
             e = Entries(user_id=current_user.id,text=request.form['entry'])
-            db.session.add(e)
+        if t is None:
+            t = Tags(tag=request.form['tag'])
+        e.tags.append(t)
+        db.session.add(e)
+        db.session.commit()
+    list = Entries.query.filter_by(user_id=current_user.id).all()
+    return render_template('list.html',list=list)
+
+@app.route('/new')
+@login_required
+def new_list():
+    if request.method == "POST":
+        e = Entries.query.filter_by(user_id=current_user.id,text=request.form['entry']).first()
+        t = Tags.query.filter_by(tag=request.form['tag']).first()
         if t is None:
             t = Tags(tag=request.form['tag'])
             db.session.add(t)
-
+        if e is None:
+            e = Entries(user_id=current_user.id,text=request.form['entry'])
+            e.tags.append(t)
+            db.session.add(e)
         db.session.commit()
     list=Entries.query.filter_by(user_id=current_user.id).all()
-    return render_template('index.html',list=list)
+    return render_template('list.html',list=list)
 
 
 @app.route('/t/<tag>')
 @login_required
 def tag_list(tag):
-    tag_id=Tags.query.filter_by(tag=tag).first()
-    if tag_id is None:
-        return redirect(url_for('index'))
-    u_entries=Entries.query.filter_by(user_id=current_user.id).all()
-
+    list=Entries.query.join(Tags.entries).filter(Entries.user_id==current_user.id).filter(Tags.tag==tag).all()
+    if list is None:
+        return redirect(url_for('new_list'))
     return render_template('list.html',list=list)
+
 
 @app.route('/login', methods=['GET','POST'])
 def login():
