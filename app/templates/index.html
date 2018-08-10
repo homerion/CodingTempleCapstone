@@ -8,27 +8,30 @@ Home
 
 {% block app_content %}
 <div class="container">
-  <div class="row">
-    <input type="text" name="tag" form="newitem" class="mx-auto"  placeholder="List Title" value="">
-  </div>
-  <div class="row">
-    <form class="mx-auto" id="list">
-{% for entry in list%}
-      <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="" id="entry{{entry.id}}">
-        <label class="form-check-label" for="entry{{entry.id}}">
-            {{entry.text}}
-        </label>
-      </div>
-{% endfor %}
-    </form>
-  </div>
-  <div class="row">
-    <form action="{{url_for('index')}}" method="POST" id="newitem" class="text-center mx-auto">
-      <input type="text" placeholder=" + List Item"  name="entry" autofocus>
+
+
+{% for key,value in list.items()%}
+
+    <form class="mx-auto card"  id='{{key}}' action="{{url_for('tag_list',tag=key)}}" method="POST">
+      <input type="text" value="{{key}}" placeholder="Title" autocomplete="off" class="form-control"  name="tag" readonly>
+
+
+      {% for entry in value%}
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="entry{{entry.id}}">
+          <label class="form-check-label" for="entry{{entry.id}}">
+              {{entry.text}}
+          </label>
+        </div>
+      {% endfor %}
+
+      <input type="text" placeholder=" + List Item" autocomplete="off" name="entry" autofocus>
       <input type="submit" value="+" name="add">
     </form>
-  </div>
+
+
+{%endfor%}
+
 </div>
 
 

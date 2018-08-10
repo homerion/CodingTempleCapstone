@@ -16,7 +16,7 @@ Home
 
 
       {% for tag in list%}
-        <a href="{{url_for('tag_list',tag=tag)}}" class="">
+        <a href="{{url_for('tag_list',tag=tag)}}" class="btn btn-primary">
           {{tag}}
         </a>
       {% endfor %}

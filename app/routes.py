@@ -11,7 +11,6 @@ from werkzeug.urls import url_parse
 @app.route('/index', methods=['GET','POST'])
 @login_required
 def index():
-    uTags = Tags.query.join(Entries.tags).filter(Entries.user_id==current_user.id).all()
     if request.method == "POST":
         e = Entries.query.filter_by(user_id=current_user.id,text=request.form['entry']).first()
         t = Tags.query.filter_by(tag=request.form['tag']).first()
@@ -22,8 +21,13 @@ def index():
         e.tags.append(t)
         db.session.add(e)
         db.session.commit()
-    list = Entries.query.filter_by(user_id=current_user.id).all()
-    return render_template('list.html',list=list)
+    uTags = Tags.query.join(Entries.tags).filter(Entries.user_id==current_user.id).all()
+    entryList = Entries.query.join(Tags.entries).filter_by(user_id=current_user.id)
+    listsByTag = {}
+    for t in uTags:
+        listsByTag[t.tag]=entryList.filter(Tags.tag==t.tag).all()
+
+    return render_template('index.html',list=listsByTag)
 
 #a new list for a specific tag
 @app.route('/new', methods=['GET','POST'])
