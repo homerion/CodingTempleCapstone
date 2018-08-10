@@ -24,7 +24,7 @@ Welcome
     <a class="navbar-brand" href={{url_for("index")}}>Tidy</a>
         <a class="nav-link text-light" href='{{url_for("index")}}'>Home</a>
     {% if current_user.is_authenticated %}
-        <a class="nav-link text-light" href="">Tags</a>
+        <a class="nav-link text-light" href="{{url_for('tags')}}">Tags</a>
         <a class="nav-link text-light" href="">Pins</a>
         <a class="nav-link text-light" href="">New</a>
 

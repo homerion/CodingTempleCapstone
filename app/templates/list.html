@@ -13,9 +13,12 @@ Home
   <div class="row">
 
 
-    <form class="mx-auto card" action="{{url_for('index')}}"
-     id='list' action="index.html" method="POST">
-      <input type="text" placeholder="Title" autocomplete="off" class="form-control"  name="tag">
+    <form class="mx-auto card"  id='list' action="{{url_for('tag_list',tag=head)}}" method="POST">
+     {% if readonly %}
+      <input type="text" value="{{head}}" placeholder="Title" autocomplete="off" class="form-control"  name="tag" readonly>
+      {%else%}
+      <input type="text" value="{{head}}" placeholder="Title" autocomplete="off" class="form-control"  name="tag">
+      {% endif %}
 
       {% for entry in list%}
         <div class="form-check">

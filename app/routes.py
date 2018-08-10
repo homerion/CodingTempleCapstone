@@ -6,7 +6,7 @@ from app.models import User, Entries, Tags, tag_map
 from werkzeug.urls import url_parse
 
 
-
+#will produce every list for every tag
 @app.route('/', methods=['GET','POST'])
 @app.route('/index', methods=['GET','POST'])
 @login_required
@@ -25,7 +25,8 @@ def index():
     list = Entries.query.filter_by(user_id=current_user.id).all()
     return render_template('list.html',list=list)
 
-@app.route('/new')
+#a new list for a specific tag
+@app.route('/new', methods=['GET','POST'])
 @login_required
 def new_list():
     if request.method == "POST":
@@ -43,13 +44,29 @@ def new_list():
     return render_template('list.html',list=list)
 
 
-@app.route('/t/<tag>')
+#produces a list of entries with this tag
+@app.route('/t/<tag>', methods=['GET','POST'])
 @login_required
 def tag_list(tag):
-    list=Entries.query.join(Tags.entries).filter(Entries.user_id==current_user.id).filter(Tags.tag==tag).all()
-    if list is None:
+    t = Tags.query.filter_by(tag=tag).first()
+    if t is None:
         return redirect(url_for('new_list'))
-    return render_template('list.html',list=list)
+    if request.method == "POST":
+        e = Entries.query.filter_by(user_id=current_user.id,text=request.form['entry']).first()
+        if e is None:
+            e = Entries(user_id=current_user.id,text=request.form['entry'])
+        e.tags.append(t)
+        db.session.add(e)
+        db.session.commit()
+    list=Entries.query.join(Tags.entries).filter(Entries.user_id==current_user.id).filter(Tags.tag==tag).all()
+    return render_template('list.html',list=list,head=tag,readonly=True)
+
+# every tag listed out as links to the tag_list page
+@app.route('/tags', methods=['GET','POST'])
+@login_required
+def tags():
+    list=Tags.query.join(Entries.tags).filter(Entries.user_id==current_user.id).all()
+    return render_template('tags.html',list=list)
 
 
 @app.route('/login', methods=['GET','POST'])
