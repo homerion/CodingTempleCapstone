@@ -1,10 +1,20 @@
 $("input[type='search']").on('input', event => {
   console.log(event.target.value);
 })
-// $(":checkbox").change(event=>{
-//   let id = event.target.id;
-//   $(`label[for=${id}]`).toggleClass('strike');
-// })
+$(":checkbox").change(event=>{
+  let id = event.target.id;
+  let text = $(`label[for=${id}]`).text();
+  $(`label:contains(${text})`).toggleClass('strike');
+  if ($(`#${id}`).is(':checked')) {
+    $(`label:contains(${text})`).siblings('input').prop('checked',true)
+  } else {
+    $(`label:contains(${text})`).siblings('input').prop('checked',false)
+  }
+})
+$(".card-header").on('click',event=>{
+  $(event.target).closest('.card').hide();
+  $(".card").toggle();
+})
 // $(".form-check").click(event=>{
 //   let toggle = $(event.target).children('input').prop('checked');
 //   $(event.target).children('input').prop('checked',!toggle);
