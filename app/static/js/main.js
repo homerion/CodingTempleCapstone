@@ -13,13 +13,14 @@ $(":checkbox").change(event=>{
     $(`label:contains(${text})`).siblings('input').prop('checked',false)
   }
   $.post('/done',{'entry_id': name},function(response) {
-    alert(response);
+    // alert(response);
   })
   labels.parent().remove();
 })
 $(".card-header").on('click',event=>{
   $(event.target).closest('.card').hide();
   $(".card").toggle().toggleClass('col-6 mx-auto');
+  $(event.target).parent().toggleClass('card-columns').toggleClass('card-group')
 })
 $(".card-header").mouseenter(event=>{
   $(event.target).children('img').show();
@@ -51,20 +52,3 @@ function shownew() {
 $('#new').on('submit',event=>{
   console.log('yes');
 })
-
-// $("#newitem").on('submit',event=>{
-//   event.preventDefault();
-//   $.post('/index',this.entry,)
-// })
-
-// $( "form" ).on( "submit", function( event ) {
-//   event.preventDefault();
-//   let input = $( this ).children("[type='text']").val();
-//   $("#list").append(`  <div class="form-check">
-//       <input class="form-check-input" type="checkbox" value="" id="defaultCheck4">
-//       <label class="form-check-label" for="defaultCheck4">
-//           ${input}
-//       </label>
-//     </div>`);
-//   $( this ).children("[type='text']").val('');
-// });
