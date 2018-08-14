@@ -44,6 +44,7 @@ function removeentry() {
 }
 function shownew() {
   $('#new').toggleClass('card');
+  $('#new').parent().removeClass('card-columns').addClass('card-group');
   $('.card').toggle();
   $(event.target).hide()
 }
