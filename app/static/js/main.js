@@ -3,15 +3,19 @@ $("input[type='search']").on('input', event => {
 })
 $(":checkbox").change(event=>{
   let id = event.target.id;
+  let name = $(`#${id}`).prop('name');
   let text = $(`label[for=${id}]`).text();
   let labels =  $(`label:contains(${text})`);
   labels.toggleClass('strike');
-  labels.parent().hide();
   if ($(`#${id}`).is(':checked')) {
     $(`label:contains(${text})`).siblings('input').prop('checked',true)
   } else {
     $(`label:contains(${text})`).siblings('input').prop('checked',false)
   }
+  $.post('/done',{'entry_id': name},function(response) {
+    alert(response);
+  })
+  labels.parent().remove();
 })
 $(".card-header").on('click',event=>{
   $(event.target).closest('.card').hide();
@@ -29,13 +33,11 @@ $(".list-group-item").mouseenter(event=>{
 $(".list-group-item").mouseleave(event=>{
   $(event.target).children('img').hide();
 })
-function removetag() {
 
-}
 
 function removeentry() {
   let id = $(event.target).siblings('input').prop('id');
-  $.post('/decouple',{'id': id},function(response) {
+  $.post('/decouple',{'joined_id': id},function(response) {
       // alert(response)
   })
   $(event.target).parent().remove();

@@ -7,7 +7,7 @@ Home
 
 
 {% block app_content %}
-<div class="container card-group">
+<div class="container card-columns">
 
   <form id='new' class="mx-auto col-5 border-0 m-2 mt-5" action="{{url_for('index')}}" method="POST">
       <input type="text" class="form-control rounded-0 mb-2"  placeholder="Tittle" autocomplete="off" name="tag" required tabindex="1" autofocus>
@@ -45,12 +45,12 @@ Home
         {% if key=='' %}
         <div class="text-white card-link" href="">"No Tittle"</div>
         <input type="hidden" value="{{key}}"  placeholder="No Current Tittle" autocomplete="off" name="tag">
-        <img style="width:1em" src="../static/open_iconic/svg/circle-x.svg" alt='delete'>
+        <!-- <img style="width:1em" src="../static/open_iconic/svg/circle-x.svg" alt='delete'> -->
         {% else %}
         <div class="text-white card-link" href="{{url_for('tag_list',tag=key)}}">{{key}}</div>
         <!-- <img style="width:1em" src="../static/open_iconic/svg/cog.svg" alt="edit"> -->
         <input type="hidden" value="{{key}}" placeholder="No Current Title" autocomplete="off"  name="tag">
-        <img style="width:1em" src="../static/open_iconic/svg/circle-x.svg" alt='delete'>
+        <!-- <img style="width:1em" src="../static/open_iconic/svg/circle-x.svg" alt='delete'> -->
         {%endif%}
       </div>
       <div class="list-group list-group-flush">

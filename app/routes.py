@@ -30,9 +30,30 @@ def index():
         listsByTag[t.tag]=entryList.filter(Tags.tag==t.tag).all()
     return render_template('index.html',list=listsByTag)
 
+#gets rid of a list from a user
+# @app.route('/removetag',methods=['POST'])
+# def removetag():
+#     #done is a special function for the user loader
+#     info = request.form['tag_id']
+#     relations = db.session.query(tag_map).filter(tag_map.c.entry_id==info[1],tag_map.c.tag_id==tag.id)
+#     db.session.delete(entry)
+#     db.session.commit()
+#     return str(info)
+
+#gets rid of an entry from the db
+@app.route('/done',methods=['POST'])
+def did():
+    #done is a special function for the user loader
+    info = request.form['entry_id']
+    entry = Entries.query.get(info)
+    db.session.delete(entry)
+    db.session.commit()
+    return str(info)
+
+#gets rid of an association between a tag and an entry
 @app.route('/decouple',methods=['POST'])
-def update():
-    info = request.form['id']
+def decouple():
+    info = request.form['joined_id']
     # the split returns the tag key (a string) and the entry id (int)
     info = str(info).split('ent')
     tag = Tags.query.filter_by(tag=info[0]).first()
