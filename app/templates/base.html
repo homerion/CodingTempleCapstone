@@ -9,9 +9,7 @@ Welcome
 
 
 {% block scripts %}
-<script src="https://code.jquery.com/jquery-3.3.1.slim.js"
-  integrity="sha256-fNXJFIlca05BIO2Y5zh1xrShK3ME+/lYZ0j+ChxX2DA="
-  crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script type="text/javascript" src="../static/js/main.js"></script>
@@ -25,8 +23,8 @@ Welcome
         <a class="nav-link text-light" href='{{url_for("index")}}'>Home</a>
     {% if current_user.is_authenticated %}
         <a class="nav-link text-light" href="{{url_for('tags')}}">Tags</a>
-        <a class="nav-link text-light" href="">Pins</a>
-        <a class="nav-link text-light" href="">New</a>
+        <!-- <a class="nav-link text-light" href="">Pins</a> -->
+        <a class="nav-link text-light" onclick="shownew()">New</a>
 
     <!--form for filtering out tags?  -->
     <form class="form-inline ml-auto my-2 my-lg-0">
@@ -59,6 +57,7 @@ Welcome
 
 
 {% block styles %}
+  <link rel="icon" type="image/png" href="../static/open_iconic/png/list.png">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <link rel="stylesheet" href="../static/css/main.css">
 {% endblock %}

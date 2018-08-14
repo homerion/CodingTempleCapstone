@@ -4,7 +4,9 @@ $("input[type='search']").on('input', event => {
 $(":checkbox").change(event=>{
   let id = event.target.id;
   let text = $(`label[for=${id}]`).text();
-  $(`label:contains(${text})`).toggleClass('strike');
+  let labels =  $(`label:contains(${text})`);
+  labels.toggleClass('strike');
+  labels.parent().hide();
   if ($(`#${id}`).is(':checked')) {
     $(`label:contains(${text})`).siblings('input').prop('checked',true)
   } else {
@@ -13,13 +15,40 @@ $(":checkbox").change(event=>{
 })
 $(".card-header").on('click',event=>{
   $(event.target).closest('.card').hide();
-  $(".card").toggle();
+  $(".card").toggle().toggleClass('col-6 mx-auto');
 })
-// $(".form-check").click(event=>{
-//   let toggle = $(event.target).children('input').prop('checked');
-//   $(event.target).children('input').prop('checked',!toggle);
-//   $(event.target).children('label').toggleClass('strike');
-// })
+$(".card-header").mouseenter(event=>{
+  $(event.target).children('img').show();
+})
+$(".card-header").mouseleave(event=>{
+  $(event.target).children('img').hide();
+})
+$(".list-group-item").mouseenter(event=>{
+  $(event.target).children('img').show();
+})
+$(".list-group-item").mouseleave(event=>{
+  $(event.target).children('img').hide();
+})
+function removetag() {
+
+}
+
+function removeentry() {
+  let id = $(event.target).siblings('input').prop('id');
+  $.post('/decouple',{'id': id},function(response) {
+      // alert(response)
+  })
+  $(event.target).parent().remove();
+}
+function shownew() {
+  $('#new').toggleClass('card');
+  $('.card').toggle();
+  $(event.target).hide()
+}
+$('#new').on('submit',event=>{
+  console.log('yes');
+})
+
 // $("#newitem").on('submit',event=>{
 //   event.preventDefault();
 //   $.post('/index',this.entry,)

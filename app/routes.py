@@ -11,26 +11,38 @@ from werkzeug.urls import url_parse
 @app.route('/index', methods=['GET','POST'])
 @login_required
 def index():
+    info=request.form
     if request.method == "POST":
-        e = Entries.query.filter_by(user_id=current_user.id,text=request.form['entry']).first()
-        t = Tags.query.filter_by(tag=request.form['tag']).first()
-        if e is None:
-            e = Entries(user_id=current_user.id,text=request.form['entry'])
-        if t is None:
-            t = Tags(tag=request.form['tag'])
-        e.tags.append(t)
-        db.session.add(e)
+        if 'entry' in info:
+            e = Entries.query.filter_by(user_id=current_user.id,text=request.form['entry']).first()
+            t = Tags.query.filter_by(tag=request.form['tag']).first()
+            if e is None:
+                e = Entries(user_id=current_user.id,text=request.form['entry'])
+            if t is None:
+                t = Tags(tag=request.form['tag'])
+            e.tags.append(t)
+            db.session.add(e)
         db.session.commit()
     uTags = Tags.query.join(Entries.tags).filter(Entries.user_id==current_user.id).all()
     entryList = Entries.query.join(Tags.entries).filter_by(user_id=current_user.id)
     listsByTag = {}
     for t in uTags:
         listsByTag[t.tag]=entryList.filter(Tags.tag==t.tag).all()
-
     return render_template('index.html',list=listsByTag)
 
+@app.route('/decouple',methods=['POST'])
+def update():
+    info = request.form['id']
+    # the split returns the tag key (a string) and the entry id (int)
+    info = str(info).split('ent')
+    tag = Tags.query.filter_by(tag=info[0]).first()
+    info = db.session.query(tag_map).filter(tag_map.c.entry_id==info[1],tag_map.c.tag_id==tag.id)
+    info.delete(synchronize_session=False)
+    db.session.commit()
+    return str('done!')
+
 #a new list for a specific tag
-@app.route('/new', methods=['GET','POST'])
+@app.route('/new', methods=['POST'])
 @login_required
 def new_list():
     if request.method == "POST":
@@ -62,14 +74,14 @@ def tag_list(tag):
         e.tags.append(t)
         db.session.add(e)
         db.session.commit()
-    list=Entries.query.join(Tags.entries).filter(Entries.user_id==current_user.id).filter(Tags.tag==tag).all()
-    return render_template('list.html',list=list,head=tag,readonly=True)
+    list=Entries.query.join(Tags.entries).filter(Entries.user_id==current_user.id,Tags.tag==tag).all()
+    return render_template('list.html',list=list,head=tag)
 
 # every tag listed out as links to the tag_list page
 @app.route('/tags', methods=['GET','POST'])
 @login_required
 def tags():
-    list=Tags.query.join(Entries.tags).filter(Entries.user_id==current_user.id).all()
+    list=Tags.query.join(Entries.tags).filter(Entries.user_id==current_user.id,Tags.tag!='').all()
     return render_template('tags.html',list=list)
 
 
