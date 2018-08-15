@@ -11,7 +11,7 @@ function new_entry(entry,entry_id,key) {
 $("input[type='search']").on('input', event => {
   console.log(event.target.value);
 })
-$(":checkbox").change(event=>{
+$('.card').on('change',":checkbox",event=>{
   let id = event.target.id;
   let name = $(`#${id}`).prop('name');
   let text = $(`label[for=${id}]`).text();
@@ -34,16 +34,16 @@ $(".card-header").on('click',event=>{
   $('.container').toggleClass('card-group');
   $(".card").toggle();
 })
-$(".card-header").mouseenter(event=>{
+$(".card-header").on('mouseenter',event=>{
   $(event.target).children('img').show();
 })
-$(".card-header").mouseleave(event=>{
+$(".card-header").on('mouseleave',event=>{
   $(event.target).children('img').hide();
 })
-$(".list-group-item").mouseenter(event=>{
+$('.card').on('mouseenter',".list-group-item",event=>{
   $(event.target).children('img').show();
 })
-$(".list-group-item").mouseleave(event=>{
+$('.card').on('mouseleave',".list-group-item",event=>{
   $(event.target).children('img').hide();
 })
 $('form').on('submit',event=>{
@@ -56,13 +56,8 @@ $('form').on('submit',event=>{
   $.post('/newentry',data,function (entry_id) {
     // console.log(tag);
     // console.log(entry);
-    form.children('.list-group').append(new_entry(entry,entry_id,tag));
-    form.children('.list-group-item').on('mouseenter',event=>{
-      $(event.target).children('img').show();
-    })
-    form.children('.list-group-item').on('mouseleave',event=>{
-      $(event.target).children('img').hide();
-    })
+    var new_line = new_entry(entry,entry_id,tag);
+    form.children('.list-group').append(new_line);
     form.children('input[name="entry"]').val('');
   })
 })
