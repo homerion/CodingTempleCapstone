@@ -62,7 +62,7 @@ $('.card').on('submit',event=>{
   })
 })
 
-function removeentry() {
+function decouple() {
   let id = $(event.target).siblings('input').prop('id');
   $.post('/decouple',{'joined_id': id},function(response) {
       // alert(response)
