@@ -24,7 +24,7 @@ Welcome
     {% if current_user.is_authenticated %}
         <a class="nav-link text-light" href="{{url_for('tags')}}">Tags</a>
         <!-- <a class="nav-link text-light" href="">Pins</a> -->
-        <a class="nav-link text-light" onclick="shownew()">New</a>
+        <a class="nav-link text-light" href="{{url_for('new_list')}}">New</a>
 
     <!--form for filtering out tags?  -->
     <form class="form-inline ml-auto my-2 my-lg-0">

@@ -8,9 +8,6 @@ input[type=text]:focus,input[type=checkbox]:focus{
 img{
   display: none;
 }
-#new{
-  display: none;
-}
 .list-group-item:hover {
   background-color: lightyellow;
 }

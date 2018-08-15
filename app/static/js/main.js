@@ -1,3 +1,13 @@
+function new_entry(entry,entry_id,key) {
+  return `<div class="list-group-item border-right border-left form-check d-flex pl-5">
+    <input class="form-check-input" type="checkbox" name="${entry_id}" id="${key}ent${entry_id}">
+    <label class="form-check-label mr-auto" for="${key}ent${entry_id}">
+        ${entry}
+    </label>
+    <img onclick="removeentry()" style="width:1em" src="../static/open_iconic/svg/circle-x.svg" alt='delete'>
+  </div>`
+}
+
 $("input[type='search']").on('input', event => {
   console.log(event.target.value);
 })
@@ -19,8 +29,10 @@ $(":checkbox").change(event=>{
 })
 $(".card-header").on('click',event=>{
   $(event.target).closest('.card').hide();
-  $(".card").toggle().toggleClass('col-6 mx-auto');
-  $(event.target).parent().toggleClass('card-columns').toggleClass('card-group')
+  $('.card').toggleClass('col-md-6 mx-auto');
+  $('.container').toggleClass('card-columns');
+  $('.container').toggleClass('card-group');
+  $(".card").toggle();
 })
 $(".card-header").mouseenter(event=>{
   $(event.target).children('img').show();
@@ -34,7 +46,26 @@ $(".list-group-item").mouseenter(event=>{
 $(".list-group-item").mouseleave(event=>{
   $(event.target).children('img').hide();
 })
-
+$('form').on('submit',event=>{
+  event.preventDefault();
+  let form = $(event.target);
+  // let url = form.attr('action')
+  let data = form.serialize();
+  let tag = form.prop('id');
+  let entry = form.children('input[name="entry"]').val();
+  $.post('/newentry',data,function (entry_id) {
+    // console.log(tag);
+    // console.log(entry);
+    form.children('.list-group').append(new_entry(entry,entry_id,tag));
+    form.children('.list-group-item').on('mouseenter',event=>{
+      $(event.target).children('img').show();
+    })
+    form.children('.list-group-item').on('mouseleave',event=>{
+      $(event.target).children('img').hide();
+    })
+    form.children('input[name="entry"]').val('');
+  })
+})
 
 function removeentry() {
   let id = $(event.target).siblings('input').prop('id');
@@ -43,12 +74,7 @@ function removeentry() {
   })
   $(event.target).parent().remove();
 }
-function shownew() {
-  $('#new').toggleClass('card');
-  $('#new').parent().removeClass('card-columns').addClass('card-group');
-  $('.card').toggle();
-  $(event.target).hide()
-}
+
 $('#new').on('submit',event=>{
   console.log('yes');
 })

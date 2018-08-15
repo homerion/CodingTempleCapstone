@@ -43,7 +43,7 @@ def index():
 #gets rid of an entry from the db
 @app.route('/done',methods=['POST'])
 def did():
-    #done is a special function for the user loader
+    #done is a special function for the user loader so have to call the function did
     info = request.form['entry_id']
     entry = Entries.query.get(info)
     db.session.delete(entry)
@@ -62,8 +62,23 @@ def decouple():
     db.session.commit()
     return str('done!')
 
-#a new list for a specific tag
-@app.route('/new', methods=['POST'])
+#adds a new entry to the db and associates it to the tag it was made in
+@app.route('/newentry',methods=['POST'])
+def new_entry():
+    e = Entries.query.filter_by(user_id=current_user.id,text=request.form['entry']).first()
+    t = Tags.query.filter_by(tag=request.form['tag']).first()
+    if e is None:
+        e = Entries(user_id=current_user.id,text=request.form['entry'])
+    if t is None:
+        t = Tags(tag=request.form['tag'])
+    e.tags.append(t)
+    db.session.add(e)
+    db.session.commit()
+    id = Entries.query.filter_by(user_id=current_user.id,text=request.form['entry']).first().id
+    return str(id)
+
+#a new list for a yet unspecified tag
+@app.route('/new', methods=['GET','POST'])
 @login_required
 def new_list():
     if request.method == "POST":
@@ -74,11 +89,10 @@ def new_list():
             db.session.add(t)
         if e is None:
             e = Entries(user_id=current_user.id,text=request.form['entry'])
-            e.tags.append(t)
-            db.session.add(e)
+        e.tags.append(t)
+        db.session.add(e)
         db.session.commit()
-    list=Entries.query.filter_by(user_id=current_user.id).all()
-    return render_template('list.html',list=list)
+    return render_template('new.html')
 
 
 #produces a list of entries with this tag

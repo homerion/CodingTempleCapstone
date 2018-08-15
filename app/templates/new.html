@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Home
+{% endblock %}
+
+
+
+{% block app_content %}
+<div class="container card-group">
+
+<form id='new' class="mx-auto col-5 border-0 m-2 mt-5" action="{{url_for('index')}}" method="POST">
+    <input type="text" class="form-control rounded-0 mb-2"  placeholder="Tittle" autocomplete="off" name="tag" required tabindex="1" autofocus>
+  <div class="list-group list-group-flush">
+    <!-- dummy entry 1 -->
+    <div class="list-group-item form-check d-flex pl-5">
+      <input class="form-check-input" type="checkbox">
+      <label class="form-check-label mr-auto">#
+      </label>
+      <img style="width:1em" src="../static/open_iconic/svg/circle-x.svg" alt='delete'>
+    </div>
+      <!-- dummy entry 2 -->
+    <div class="list-group-item form-check d-flex pl-5">
+      <input class="form-check-input" type="checkbox">
+      <label class="form-check-label mr-auto" >#
+      </label>
+      <img style="width:1em" src="../static/open_iconic/svg/circle-x.svg" alt='delete'>
+    </div>
+      <!-- dummy entry 3 -->
+    <div class="list-group-item form-check d-flex pl-5">
+      <input class="form-check-input" type="checkbox">
+      <label class="form-check-label mr-auto">#
+      </label>
+      <img style="width:1em" src="../static/open_iconic/svg/circle-x.svg" alt='delete'>
+    </div>
+  </div>
+    <input type="text" tabindex="2" class="form-control rounded-0 mt-2"  placeholder=" + List Item" autocomplete="off" name="entry">
+    <input type="submit" value="Add" hidden>
+</form>
+
+</div>
+
+{% endblock %}
