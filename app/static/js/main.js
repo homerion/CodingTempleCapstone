@@ -46,7 +46,7 @@ $('.card').on('mouseenter',".list-group-item",event=>{
 $('.card').on('mouseleave',".list-group-item",event=>{
   $(event.target).children('img').hide();
 })
-$('form').on('submit',event=>{
+$('.card').on('submit',event=>{
   event.preventDefault();
   let form = $(event.target);
   // let url = form.attr('action')
